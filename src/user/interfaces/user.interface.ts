@@ -1,6 +1,12 @@
+import {
+  UserAccountTypeEnum,
+  UserImageEnum,
+  UserTimeWindowEnum,
+} from '../enums';
+
 export interface UserInterface {
   userName: string;
-  accountType?: 'epic' | 'psn' | 'xbl';
-  timeWindow?: 'season' | 'lifetime';
-  image?: 'all' | 'keyboardMouse' | 'gamepad' | 'touch' | 'none';
+  accountType: UserAccountTypeEnum;
+  timeWindow: UserTimeWindowEnum;
+  image: UserImageEnum;
 }

@@ -7,18 +7,19 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  NotFoundException,
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @ApiResponse({ status: 201, description: 'User created successfully!' })
   create(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -29,29 +30,26 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    try{
-      return this.userService.findOne(id);
-    }catch(error){
-      throw new NotFoundException("Player not found!");
-    }
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) updateUserDto: UpdateUserDto) {
-    try{
-      return this.userService.update(id, updateUserDto);
-    }catch (error){
-      throw new NotFoundException("Player not found!");
-    }
+  @ApiResponse({ status: 200, description: 'User updated successfully!' })
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    try{
-      return this.userService.remove(id);
-    }catch (error){
-      throw new NotFoundException("Player not found!");
-    }
+  @ApiResponse({ status: 204, description: 'User removed successfully!' })
+  @ApiResponse({
+    status: 400,
+    description: 'User not found and cannot be removed',
+  })
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.remove(id);
   }
 }

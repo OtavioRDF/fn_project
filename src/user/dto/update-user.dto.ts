@@ -1,21 +1,45 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
-import { IsEnum, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { IsEnum, IsNotEmpty, MinLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  UserAccountTypeEnum,
+  UserImageEnum,
+  UserTimeWindowEnum,
+} from '../enums';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-    @IsNotEmpty()
-    @MinLength(4)
-    userName: string;
+  @IsNotEmpty()
+  @MinLength(4)
+  @ApiProperty()
+  userName: string;
 
-    @IsOptional()
-    @IsEnum(['epic', 'psn', 'xbl'], { message: 'You need to provide a valid plataform!'})
-    accountType: 'epic' | 'psn' | 'xbl';
+  @IsEnum(UserAccountTypeEnum, {
+    message: 'You need to provide a valid plataform!',
+  })
+  @ApiPropertyOptional({
+    enum: UserAccountTypeEnum,
+    enumName: 'AccountType',
+    default: 'epic',
+  })
+  accountType: UserAccountTypeEnum;
 
-    @IsOptional()
-    @IsEnum(['season', 'lifetime'], { message: 'You need to provide a valid time window!'})
-    timeWindow: 'season' | 'lifetime';
+  @IsEnum(UserTimeWindowEnum, {
+    message: 'You need to provide a valid time window!',
+  })
+  @ApiPropertyOptional({
+    enum: UserTimeWindowEnum,
+    enumName: 'TimeWindow',
+    default: 'lifetime',
+  })
+  timeWindow: UserTimeWindowEnum;
 
-    @IsOptional()
-    @IsEnum(['all', 'keyboardMouse', 'gamepad', 'touch', 'none'], { message: 'You need to provide a valid image!'})
-    image: 'all' | 'keyboardMouse' | 'gamepad' | 'touch' | 'none';
+  @IsEnum(UserImageEnum, { message: 'You need to provide a valid image!' })
+  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    enum: UserImageEnum,
+    enumName: 'ImageEnum',
+    default: 'none',
+  })
+  image: UserImageEnum;
 }

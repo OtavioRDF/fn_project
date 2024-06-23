@@ -1,5 +1,16 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserInterface } from '../interfaces';
+import {
+  UserAccountTypeEnum,
+  UserImageEnum,
+  UserTimeWindowEnum,
+} from '../enums';
 
 @Entity()
 export class User implements UserInterface {
@@ -10,14 +21,14 @@ export class User implements UserInterface {
   userName: string;
 
   @Column({ default: 'epic' })
-  accountType: 'epic' | 'psn' | 'xbl';
+  accountType: UserAccountTypeEnum;
 
   @Column({ default: 'lifetime' })
-  timeWindow: 'season' | 'lifetime';
+  timeWindow: UserTimeWindowEnum;
 
   @Column({ default: 'none' })
-  image: 'all' | 'keyboardMouse' | 'gamepad' | 'touch' | 'none';
-  
+  image: UserImageEnum;
+
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
