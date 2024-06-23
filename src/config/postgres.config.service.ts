@@ -8,7 +8,6 @@ export class PostgresConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
-    console.log(this.configService.get<string>('POSTGRES_USER'));
     return {
       type: 'postgres',
       host: this.configService.get<string>('DB_HOST'),
@@ -17,6 +16,7 @@ export class PostgresConfigService implements TypeOrmOptionsFactory {
       password: this.configService.get<string>('POSTGRES_PASSWORD'),
       database: this.configService.get<string>('POSTGRES_DB'),
       entities: [User],
+      migrations: ["dist/migrations/*{.ts, .js}"],
       synchronize: true,
     };
   }
