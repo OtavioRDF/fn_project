@@ -36,7 +36,7 @@ export class UserController {
 
   @Patch(':id')
   @ApiResponse({ status: 200, description: 'User updated successfully!' })
-  @ApiResponse({ status: 400, description: 'User not found and cannot be updated' })
+  @ApiResponse({ status: 404, description: 'User not found and cannot be updated' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
@@ -47,7 +47,7 @@ export class UserController {
   @Delete(':id')
   @ApiResponse({ status: 204, description: 'User removed successfully!' })
   @ApiResponse({
-    status: 400,
+    status: 404,
     description: 'User not found and cannot be removed',
   })
   async remove(@Param('id', ParseIntPipe) id: number) {
