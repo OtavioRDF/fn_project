@@ -36,6 +36,7 @@ export class UserController {
 
   @Patch(':id')
   @ApiResponse({ status: 200, description: 'User updated successfully!' })
+  @ApiResponse({ status: 400, description: 'User not found and cannot be updated' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,

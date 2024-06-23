@@ -29,8 +29,8 @@ export class UserService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    const user = this.findOne(id);
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
 
     const updatedUser = { ...user, ...updateUserDto };
 
