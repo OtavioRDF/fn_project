@@ -30,11 +30,19 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.findOne(id);
+    return await this.usersRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const user = await transactionalEntityManager.findOneBy(User, { id });
 
-    const updatedUser = { ...user, ...updateUserDto };
+        if (!user){
+          throw new NotFoundException(`User with ID ${id} not found!`);
+        }
 
-    return this.usersRepository.update(id, updatedUser);
+        Object.assign(user, updateUserDto);
+
+        return transactionalEntityManager.save(user);
+      },
+    );
   }
 
   async remove(id: number): Promise<void> {
