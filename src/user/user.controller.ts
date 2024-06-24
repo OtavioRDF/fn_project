@@ -8,15 +8,22 @@ import {
   Delete,
   ParseIntPipe,
   ValidationPipe,
+  Query,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { StatsService } from 'src/stats/stats.service';
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly statsService: StatsService
+  ) {}
 
   @Post()
   @ApiResponse({ status: 201, description: 'User created successfully!' })
@@ -52,5 +59,14 @@ export class UserController {
   })
   async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.remove(id);
+  }
+
+  @Get(':id/stats')
+  async getUserStats (
+    @Param('id', ParseIntPipe) id: number,
+    @Query('queue') queue: string
+  ){
+    const user = await this.userService.findOne(id);
+    return await this.statsService.findOne(user.accountId, queue);
   }
 }

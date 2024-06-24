@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { CreateStatDto } from './dto/create-stat.dto';
-import { UpdateStatDto } from './dto/update-stat.dto';
+import { Repository } from 'typeorm';
+import { Stats } from './entities/stats.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { CreateStatDto } from './dto/create-stats.dto';
 
 @Injectable()
 export class StatsService {
-  create(createStatDto: CreateStatDto) {
-    return 'This action adds a new stat';
+  constructor(
+    @InjectRepository(Stats)
+    private statsRepository: Repository<Stats>,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ){}
+  
+  saveStats(userStats: CreateStatDto){
+    const stats = new Stats();
+
+    stats.account = userStats.account;
+    stats.battlePass = userStats.battlePass;
+    stats.image = userStats.image;
+    stats.stats = userStats.stats;
+
+    this.statsRepository.save(stats);
   }
 
-  findAll() {
-    return `This action returns all stats`;
-  }
+  async findOne(id: string, queue: string): Promise<Stats> {
+    const { data : { data } } = await this.httpService.axiosRef.get<{status: number, data: Stats}>(id);
+      
+    this.saveStats(data);
 
-  findOne(id: number) {
-    return `This action returns a #${id} stat`;
-  }
-
-  update(id: number, updateStatDto: UpdateStatDto) {
-    return `This action updates a #${id} stat`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} stat`;
+    if(!queue) {
+      return data;
+    }
+    
   }
 }

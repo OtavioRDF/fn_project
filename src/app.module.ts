@@ -9,7 +9,7 @@ import { StatsModule } from './stats/stats.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: 'postgres.env',
+      envFilePath: ['postgres.env', 'fortnite.env'],
     }),
     UserModule,
     TypeOrmModule.forRootAsync({

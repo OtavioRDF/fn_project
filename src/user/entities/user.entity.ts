@@ -2,7 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserInterface } from '../interfaces';
@@ -11,8 +13,10 @@ import {
   UserImageEnum,
   UserTimeWindowEnum,
 } from '../enums';
+import { Stats } from 'src/stats/entities/stats.entity';
 
 @Entity()
+@Unique(['accountId'])
 export class User implements UserInterface {
   @PrimaryGeneratedColumn()
   id: number;
@@ -37,4 +41,7 @@ export class User implements UserInterface {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @OneToOne(type => Stats, (stats) => stats.user)
+  stats: Stats
 }

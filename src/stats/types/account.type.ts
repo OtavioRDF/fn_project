@@ -1,4 +1,4 @@
 export type Account = {
-    fn_id: string;
+    id: string;
     name: string;
 }
