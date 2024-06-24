@@ -9,37 +9,36 @@ import {
 } from '../enums';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
+  @ApiProperty()
   @IsNotEmpty()
   @MinLength(4)
-  @ApiProperty()
   userName: string;
 
-  @IsEnum(UserAccountTypeEnum, {
-    message: 'You need to provide a valid plataform!',
-  })
   @ApiPropertyOptional({
     enum: UserAccountTypeEnum,
     enumName: 'AccountType',
     default: 'epic',
   })
+  @IsEnum(UserAccountTypeEnum, {
+    message: 'You need to provide a valid plataform!',
+  })
   accountType: UserAccountTypeEnum;
 
-  @IsEnum(UserTimeWindowEnum, {
-    message: 'You need to provide a valid time window!',
-  })
   @ApiPropertyOptional({
     enum: UserTimeWindowEnum,
     enumName: 'TimeWindow',
     default: 'lifetime',
   })
+  @IsEnum(UserTimeWindowEnum, {
+    message: 'You need to provide a valid time window!',
+  })
   timeWindow: UserTimeWindowEnum;
 
-  @IsEnum(UserImageEnum, { message: 'You need to provide a valid image!' })
-  @ApiPropertyOptional()
   @ApiPropertyOptional({
     enum: UserImageEnum,
     enumName: 'ImageEnum',
     default: 'none',
   })
+  @IsEnum(UserImageEnum, { message: 'You need to provide a valid image!' })
   image: UserImageEnum;
 }

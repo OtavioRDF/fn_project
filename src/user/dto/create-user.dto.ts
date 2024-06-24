@@ -7,24 +7,28 @@ import {
 } from '../enums';
 
 export class CreateUserDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  accountId: string;
+  
+  @ApiProperty()
   @IsNotEmpty()
   @MinLength(4)
-  @ApiProperty()
   userName: string;
 
+  @ApiPropertyOptional({ enum: UserAccountTypeEnum, enumName: 'AccountType' })
   @IsEnum(UserAccountTypeEnum, {
     message: 'You need to provide a valid plataform!',
   })
-  @ApiPropertyOptional({ enum: UserAccountTypeEnum, enumName: 'AccountType' })
   accountType: UserAccountTypeEnum;
 
+  @ApiPropertyOptional({ enum: UserTimeWindowEnum, enumName: 'TimeWindow' })
   @IsEnum(UserTimeWindowEnum, {
     message: 'You need to provide a valid time window!',
   })
-  @ApiPropertyOptional({ enum: UserTimeWindowEnum, enumName: 'TimeWindow' })
   timeWindow: UserTimeWindowEnum;
 
-  @IsEnum(UserImageEnum, { message: 'You need to provide a valid image!' })
   @ApiPropertyOptional({ enum: UserImageEnum, enumName: 'ImageEnum' })
+  @IsEnum(UserImageEnum, { message: 'You need to provide a valid image!' })
   image: UserImageEnum;
 }

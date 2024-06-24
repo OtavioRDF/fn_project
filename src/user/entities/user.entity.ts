@@ -18,6 +18,9 @@ export class User implements UserInterface {
   id: number;
 
   @Column()
+  accountId: string;
+
+  @Column()
   userName: string;
 
   @Column({ default: 'epic' })
