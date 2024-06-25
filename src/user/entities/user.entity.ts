@@ -42,6 +42,6 @@ export class User implements UserInterface {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @OneToOne(type => Stats, (stats) => stats.user)
-  stats: Stats
+  @OneToOne((type) => Stats, (stats) => stats.user)
+  stats: Stats;
 }

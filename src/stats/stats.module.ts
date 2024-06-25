@@ -12,10 +12,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         baseURL: configService.get<string>('API_URL'),
-        headers: { 'Authorization': configService.get<string>('AUTH')}
+        headers: { Authorization: configService.get<string>('AUTH') },
       }),
       inject: [ConfigService],
-    })
+    }),
   ],
   providers: [StatsService],
   exports: [StatsService],

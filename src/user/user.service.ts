@@ -34,7 +34,7 @@ export class UserService {
       async (transactionalEntityManager) => {
         const user = await transactionalEntityManager.findOneBy(User, { id });
 
-        if (!user){
+        if (!user) {
           throw new NotFoundException(`User with ID ${id} not found!`);
         }
 

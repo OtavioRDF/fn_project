@@ -9,20 +9,19 @@ import {
   ParseIntPipe,
   ValidationPipe,
   Query,
-  Inject,
-  forwardRef,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StatsService } from 'src/stats/stats.service';
+import { UserImageEnum } from './enums';
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly statsService: StatsService
+    private readonly statsService: StatsService,
   ) {}
 
   @Post()
@@ -43,10 +42,13 @@ export class UserController {
 
   @Patch(':id')
   @ApiResponse({ status: 200, description: 'User updated successfully!' })
-  @ApiResponse({ status: 404, description: 'User not found and cannot be updated' })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found and cannot be updated',
+  })
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.userService.update(id, updateUserDto);
   }
@@ -62,11 +64,12 @@ export class UserController {
   }
 
   @Get(':id/stats')
-  async getUserStats (
+  async getUserStats(
     @Param('id', ParseIntPipe) id: number,
-    @Query('queue') queue: string
-  ){
+    @Query('filter') filter: string,
+    @Query('image') image: UserImageEnum,
+  ) {
     const user = await this.userService.findOne(id);
-    return await this.statsService.findOne(user.accountId, queue);
+    return await this.statsService.findOne(user, filter, image);
   }
 }
